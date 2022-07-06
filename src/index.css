@@ -11,3 +11,70 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.scroll {
+  margin:40px;
+  padding:40px;
+  background-color: azure;
+  width: 1000px;
+  height: 500px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  text-align:justify;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.phase{
+
+  height: 300px;
+  background-color: whitesmoke;
+  display: flex;
+  align-items: center;
+  border: 1px;
+
+}
+.line{
+  width: 300px;
+  height: 2px;
+  background-color: black;
+  
+}
+.title{
+  display: inline-block;
+}
+.phaseEnd{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 110px;
+  width: 10px;
+}
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: black;
+border-radius: 50%;
+  display: inline-block;
+  cursor: pointer ;
+}
+.addStudy{
+  display: inline-block;
+  cursor: pointer ;
+  color: red;
+}
+.study{
+  writing-mode: vertical-lr; 
+  display: inline-block;
+  height: 100%;
+  width: 2px;
+  background-color: black;
+  margin: 0px;
+}
+.studies{
+  writing-mode: vertical-lr;
+  min-height: 100px;
+  margin: 0px;
+}
