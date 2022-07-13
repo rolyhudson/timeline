@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { MdAddCircle } from "react-icons/md";
+import DesignStudy from "./designStudy/DesignStudy";
+
 export default function Phase(props) {
-  let [studies, setStudies] = useState([
-    { name: "new study" },
-    { name: "new study" },
-    { name: "new study" },
-  ]);
+  let [studies, setStudies] = useState([{ name: "new study" }]);
+  let [openStudy, setOpenStudy] = useState(false);
 
   const addStudy = () => {
+    setOpenStudy(true);
     return setStudies([...studies, { name: "new study" }]);
+  };
+
+  const closeStudy = () => {
+    setOpenStudy(false);
   };
 
   return (
@@ -21,11 +26,13 @@ export default function Phase(props) {
           );
         })}
       </div>
-      <div className="line">
+      <div className="phaseline">
         <div className="title">{props.name}</div>
-        <div className="addStudy tooltip" onClick={addStudy}>
-          <span className="tooltiptext">add study</span>+
+        <div className="addStudy tooltip">
+          <span className="tooltiptext">add study</span>
+          <MdAddCircle onClick={addStudy}></MdAddCircle>
         </div>
+        <DesignStudy open={openStudy} close={closeStudy} />
       </div>
     </div>
   );

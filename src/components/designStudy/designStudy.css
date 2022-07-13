@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  background-color: palegreen;
+
+  padding: 20px;
+}
+.leftBar {
+  margin: 10px;
+  padding: 20px;
+  width: 20%;
+}
+.analysisPanel {
+  margin: 10px;
+  padding: 20px;
+  width: 100%;
+}
+.flex-container {
+  display: flex;
+  background-color: paleturquoise;
+}
+
+.flex-container > div {
+  background-color: #f1f1f1;
+  margin: 10px;
+  padding: 20px;
+}
