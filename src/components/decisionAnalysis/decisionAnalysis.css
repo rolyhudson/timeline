@@ -1,0 +1,40 @@
+.decisionAnalysis {
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 2px;
+  padding: 2px;
+}
+.decisionAnalysisHeader {
+}
+.flex-parent {
+  display: flex;
+}
+.flex-child {
+  flex: 0.5;
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.optionBox {
+  width: auto;
+  margin: 2px;
+  padding: 2px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.option {
+  display: inline;
+}
+.optionheader {
+  display: flex;
+  justify-content: space-between;
+}
+.optionfragment {
+  width: 100%;
+  display: inline;
+}
+.optionscores {
+  display: flex;
+  justify-content: space-between;
+}
