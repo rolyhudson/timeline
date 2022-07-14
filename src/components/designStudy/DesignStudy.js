@@ -3,13 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
 import { addMCDA } from "./designStudySlice";
 import { MdAddCircleOutline } from "react-icons/md";
-import { useGetOptionsQuery } from "../api/apiSlice";
+import { useGetOptionsQuery, useCreateProjectMutation } from "../api/apiSlice";
 
 import "./designStudy.css";
 import SummaryBar from "./SummaryBar";
 import DecisionAnalysis from "../decisionAnalysis/DecisionAnalysis";
 
 export default function DesignStudy(props) {
+  useCreateProjectMutation();
   const [decisionAnalyses, setDecisisonAnalyses] = useState([
     <DecisionAnalysis />,
   ]);
@@ -43,6 +44,18 @@ export default function DesignStudy(props) {
     content = <div>{error.toString()}</div>;
   }
 
+  const [createProject, response] = useCreateProjectMutation();
+
+  const testpost = () => {
+    console.log(response);
+    createProject({ name: "testProject" })
+      .unwrap()
+      .then(() => {})
+      .then((error) => {
+        console.log("error", error);
+      });
+  };
+
   return (
     <div>
       <Modal
@@ -55,6 +68,7 @@ export default function DesignStudy(props) {
           <span>Design study:</span>
           <input />
           <button onClick={props.close}>close</button>
+          <button onClick={testpost}>save</button>
         </div>
 
         <div className="flex-container">

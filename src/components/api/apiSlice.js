@@ -5,19 +5,30 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const apiSlice = createApi({
   // The cache reducer expects to be added at `state.api` (already default - this is optional)
   reducerPath: "api",
-  // All of our requests will have URLs starting with '/fakeApi'
+  // All of our requests will have URLs starting with "https://rat-prototype-api.azurewebsites.net/api"
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://rat-prototype-api.azurewebsites.net/api",
+    baseUrl: "https://localhost:7029/api", //"https://rat-prototype-api.azurewebsites.net/api",
   }),
   // The "endpoints" represent operations and requests for this server
   endpoints: (builder) => ({
     // The `getPosts` endpoint is a "query" operation that returns data
     getOptions: builder.query({
-      // The URL for the request is '/fakeApi/posts'
       query: () => "/Options",
+    }),
+
+    createProject: builder.mutation({
+      query: (payload) => ({
+        url: "/Projects",
+        method: "POST",
+        body: payload,
+        headers: {
+          "content-type": "application/json; charset=UTF-8",
+        },
+      }),
+      invalidatesTags: ["Post"],
     }),
   }),
 });
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetOptionsQuery } = apiSlice;
+export const { useGetOptionsQuery, useCreateProjectMutation } = apiSlice;
