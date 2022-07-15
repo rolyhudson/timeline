@@ -1,18 +1,24 @@
 import React, { useState } from "react";
 import { MdAddCircle } from "react-icons/md";
 import DesignStudy from "./designStudy/DesignStudy";
+import { useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Phase(props) {
-  let [studies, setStudies] = useState([{ name: "new study" }]);
-  let [openStudy, setOpenStudy] = useState(false);
+  let studies = useSelector((state) => state.designStudy.value);
+  let [studyState, setStudyState] = useState({ open: false, edit: false });
 
+  studies = studies.filter((s) => s.phase_id === props.id);
   const addStudy = () => {
-    setOpenStudy(true);
-    return setStudies([...studies, { name: "new study" }]);
+    setStudyState({ open: true, edit: false, id: uuidv4() });
+  };
+
+  const editStudy = (study_id) => {
+    setStudyState({ open: true, edit: true, id: study_id });
   };
 
   const closeStudy = () => {
-    setOpenStudy(false);
+    setStudyState({ open: false, edit: false });
   };
 
   return (
@@ -20,8 +26,8 @@ export default function Phase(props) {
       <div className="studies">
         {studies.map((study, i) => {
           return (
-            <div className="study" key={i}>
-              s
+            <div className="study" key={i} onClick={() => editStudy(study.id)}>
+              {study.name}
             </div>
           );
         })}
@@ -32,7 +38,11 @@ export default function Phase(props) {
           <span className="tooltiptext">add study</span>
           <MdAddCircle onClick={addStudy}></MdAddCircle>
         </div>
-        <DesignStudy open={openStudy} close={closeStudy} />
+        <DesignStudy
+          state={studyState}
+          close={closeStudy}
+          phase_id={props.id}
+        />
       </div>
     </div>
   );

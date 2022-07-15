@@ -1,30 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
-import { addMCDA } from "./designStudySlice";
+import { addDesignStudy, updateDesignStudy } from "./designStudySlice";
 import { MdAddCircleOutline } from "react-icons/md";
-import { useGetOptionsQuery, useCreateProjectMutation } from "../api/apiSlice";
+import {
+  useGetOptionsQuery,
+  useCreateProjectMutation,
+  useCreateDesignStudyMutation,
+} from "../api/apiSlice";
+import { v4 as uuidv4 } from "uuid";
 
 import "./designStudy.css";
 import SummaryBar from "./SummaryBar";
 import DecisionAnalysis from "../decisionAnalysis/DecisionAnalysis";
 
 export default function DesignStudy(props) {
-  useCreateProjectMutation();
   const [decisionAnalyses, setDecisisonAnalyses] = useState([
     <DecisionAnalysis />,
   ]);
+
+  let studyObject = {};
   const dispatch = useDispatch();
-  const [modalIsOpen, setIsOpen] = useState(props.open);
+  const [modalIsOpen, setIsOpen] = useState(props.state.open);
   Modal.setAppElement("#root");
-  function afterOpenModal() {}
+
+  function afterOpenModal() {
+    //add to store
+    if (props.state.edit) {
+      //look up by id
+    } else {
+      studyObject = {
+        name: "new design study",
+        id: props.state.id,
+        phase_id: props.phase_id,
+      };
+      dispatch(addDesignStudy(studyObject));
+    }
+  }
   function closeModal() {
     setIsOpen(false);
   }
 
   useEffect(() => {
-    setIsOpen(props.open);
-  }, [props.open]);
+    setIsOpen(props.state.open);
+  }, [props.state.open]);
 
   const {
     data: options,
@@ -45,15 +64,35 @@ export default function DesignStudy(props) {
   }
 
   const [createProject, response] = useCreateProjectMutation();
-
+  const [createDesignStudy, response1] = useCreateDesignStudyMutation();
   const testpost = () => {
-    console.log(response);
     createProject({ name: "testProject" })
       .unwrap()
       .then(() => {})
-      .then((error) => {
-        console.log("error", error);
-      });
+      .then((error) => {});
+  };
+
+  const saveStudy = () => {
+    createDesignStudy(
+      (studyObject = {
+        name: "test study 1",
+        id: props.state.id,
+        phase_id: props.phase_id,
+      })
+    )
+      .unwrap()
+      .then(() => {})
+      .then((error) => {});
+  };
+
+  const handleNameChange = (event) => {
+    studyObject = {
+      name: event.target.value,
+      id: props.state.id,
+      phase_id: props.phase_id,
+    };
+
+    dispatch(updateDesignStudy(studyObject));
   };
 
   return (
@@ -65,10 +104,20 @@ export default function DesignStudy(props) {
         contentLabel="Example Modal"
       >
         <div className="header">
-          <span>Design study:</span>
-          <input />
+          {props.state.edit ? (
+            <span>Edit Design study:</span>
+          ) : (
+            <span>New Design study:</span>
+          )}
+
+          <input
+            type="text"
+            value={studyObject.name}
+            onChange={handleNameChange}
+          />
+
           <button onClick={props.close}>close</button>
-          <button onClick={testpost}>save</button>
+          <button onClick={saveStudy}>save</button>
         </div>
 
         <div className="flex-container">

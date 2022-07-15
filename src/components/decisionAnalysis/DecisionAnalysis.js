@@ -8,7 +8,7 @@ export default function DecisionAnalysis(props) {
   let [optionsselected, setOptionsSelected] = useState([]);
   let [optionsToPick, setOptionsToPick] = useState([]);
   let [selectedElement, setSelectedElement] = useState(null);
-  console.log(optionsToPick);
+
   let elements = props.options.map((option) => ({
     name: option.parentElement,
     label: option.parentElement,

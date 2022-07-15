@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Phase from "./Phase";
 import { MdAddCircleOutline } from "react-icons/md";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Timeline(props) {
-  const [phases, setPhases] = useState([{ name: "phase_0" }]);
+  const [phases, setPhases] = useState([{ name: "phase_0", id: uuidv4() }]);
 
   let zoomStyle = {
     transformOrigin: "0% 0%",
@@ -24,13 +25,16 @@ export default function Timeline(props) {
       {phases.map((phase, i) => {
         return (
           <div className="phase" key={i}>
-            <Phase name={phase.name} />
+            <Phase name={phase.name} id={phase.id} />
             <div className="phaseEnd">
               <span />
               <span className="tooltip">
                 <MdAddCircleOutline
                   onClick={() =>
-                    setPhases([...phases, { name: "phase_" + phases.length }])
+                    setPhases([
+                      ...phases,
+                      { name: "phase_" + phases.length, id: uuidv4() },
+                    ])
                   }
                 />
                 <span className="tooltiptext">add phase</span>

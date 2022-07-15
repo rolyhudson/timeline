@@ -7,7 +7,7 @@ export const apiSlice = createApi({
   reducerPath: "api",
   // All of our requests will have URLs starting with "https://rat-prototype-api.azurewebsites.net/api"
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://localhost:7029/api", //"https://rat-prototype-api.azurewebsites.net/api",
+    baseUrl: "https://rat-prototype-api.azurewebsites.net/api",
   }),
   // The "endpoints" represent operations and requests for this server
   endpoints: (builder) => ({
@@ -27,8 +27,24 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Post"],
     }),
+
+    createDesignStudy: builder.mutation({
+      query: (payload) => ({
+        url: "/DesignStudies",
+        method: "POST",
+        body: payload,
+        headers: {
+          "content-type": "application/json; charset=UTF-8",
+        },
+      }),
+      invalidatesTags: ["Post"],
+    }),
   }),
 });
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetOptionsQuery, useCreateProjectMutation } = apiSlice;
+export const {
+  useGetOptionsQuery,
+  useCreateProjectMutation,
+  useCreateDesignStudyMutation,
+} = apiSlice;
