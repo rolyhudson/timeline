@@ -1,11 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
-import {
-  createDesignStudy,
-  readDesignStudy,
-  updateDesignStudy,
-} from "./designStudySlice";
+import { updateDesignStudy } from "./designStudySlice";
 import { MdAddCircleOutline } from "react-icons/md";
 import {
   useGetOptionsQuery,
@@ -16,9 +12,12 @@ import {
 import "./designStudy.css";
 import SummaryBar from "./SummaryBar";
 import DecisionAnalysis from "../decisionAnalysis/DecisionAnalysis";
+import { genRanHex } from "../GenRanHex";
 ///////////////////////
 
 export default function DesignStudy(props) {
+  let analyses = useSelector((state) => state.decisionAnalysis.value);
+
   const [decisionAnalyses, setDecisisonAnalyses] = useState([]);
 
   const [studyObject, setStudyObject] = useState({
@@ -33,6 +32,12 @@ export default function DesignStudy(props) {
 
   function afterOpenModal() {
     if (props.state.edit) {
+      //fetch decision analyses if in edit mode
+
+      setDecisisonAnalyses(
+        analyses.filter((s) => s.designstudy_id === props.state.study.id)
+      );
+      console.log(decisionAnalyses);
       setStudyObject(props.state.study);
     } else {
       setStudyObject({
@@ -123,17 +128,15 @@ export default function DesignStudy(props) {
                 <DecisionAnalysis
                   key={i}
                   options={content}
-                  study_id={props.id}
+                  parent_id={studyObject.id}
+                  id={decisionAnalysis}
                 />
               );
             })}
             <span className="tooltip">
               <MdAddCircleOutline
                 onClick={() =>
-                  setDecisisonAnalyses([
-                    ...decisionAnalyses,
-                    <DecisionAnalysis />,
-                  ])
+                  setDecisisonAnalyses([...decisionAnalyses, undefined])
                 }
               />
               <span className="tooltiptext">add decision analysis</span>

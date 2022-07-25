@@ -6,6 +6,7 @@ import { genRanHex } from "./GenRanHex";
 
 export default function Phase(props) {
   let studies = useSelector((state) => state.designStudy.value);
+
   let [studyState, setStudyState] = useState({
     open: false,
     edit: false,
@@ -14,7 +15,6 @@ export default function Phase(props) {
   studies = studies.filter((s) => s.phase_id === props.id);
 
   const addStudy = (study_id) => {
-    console.log(study_id);
     setStudyState({ open: true, edit: false, id: study_id });
   };
 

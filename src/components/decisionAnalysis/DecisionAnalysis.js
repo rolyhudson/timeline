@@ -7,11 +7,17 @@ import {
   createDecisionAnalysis,
   updateDecisionAnalysis,
 } from "./decisionAnalysisSlice";
+import { genRanHex } from "../GenRanHex";
+
+///////////////////////////////////////
 
 export default function DecisionAnalysis(props) {
+  const dispatch = useDispatch();
   let [optionsselected, setOptionsSelected] = useState([]);
   let [optionsToPick, setOptionsToPick] = useState([]);
   let [selectedElement, setSelectedElement] = useState(null);
+
+  let [analysisObject, setAnalysisObject] = useState();
 
   let elements = props.options.map((option) => ({
     name: option.parentElement,
@@ -21,7 +27,6 @@ export default function DecisionAnalysis(props) {
   elements = [...new Map(elements.map((item) => [item.name, item])).values()];
 
   const handleElementChange = (selectedElement) => {
-    console.log(selectedElement);
     setSelectedElement(selectedElement);
     setOptionsToPick(
       props.options.filter((option) =>
@@ -29,6 +34,17 @@ export default function DecisionAnalysis(props) {
       )
     );
   };
+
+  useEffect(() => {
+    if (props.parent_id !== undefined) {
+      //look up
+    } else {
+      //create
+      if (analysisObject.designstudy_id !== undefined) {
+        dispatch(updateDecisionAnalysis(analysisObject));
+      }
+    }
+  });
 
   const removeOptionById = (option) => {
     //remove from selected
@@ -44,13 +60,19 @@ export default function DecisionAnalysis(props) {
     setOptionsSelected([...optionsselected, option]);
   };
 
+  const handleNameChange = () => {};
+
   return (
     <div className="decisionAnalysis">
       <div className="decisionAnalysisHeader">
         <span>
           <b>Decision analysis:</b>
         </span>
-        <input />
+        <input
+          type="text"
+          value={"analysisObject.name"}
+          onChange={handleNameChange}
+        />
       </div>
 
       <div className="flex-parent">
