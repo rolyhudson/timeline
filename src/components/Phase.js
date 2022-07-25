@@ -2,23 +2,30 @@ import React, { useState } from "react";
 import { MdAddCircle } from "react-icons/md";
 import DesignStudy from "./designStudy/DesignStudy";
 import { useSelector } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
+import { genRanHex } from "./GenRanHex";
 
 export default function Phase(props) {
   let studies = useSelector((state) => state.designStudy.value);
-  let [studyState, setStudyState] = useState({ open: false, edit: false });
+  let [studyState, setStudyState] = useState({
+    open: false,
+    edit: false,
+  });
 
   studies = studies.filter((s) => s.phase_id === props.id);
-  const addStudy = () => {
-    setStudyState({ open: true, edit: false, id: uuidv4() });
+
+  const addStudy = (study_id) => {
+    console.log(study_id);
+    setStudyState({ open: true, edit: false, id: study_id });
   };
 
   const editStudy = (study_id) => {
-    setStudyState({ open: true, edit: true, id: study_id });
+    let study = studies.find((obj) => obj.id === study_id);
+    setStudyState({ open: true, edit: true, study: study });
   };
 
   const closeStudy = () => {
     setStudyState({ open: false, edit: false });
+    console.log(studies);
   };
 
   return (
@@ -36,7 +43,7 @@ export default function Phase(props) {
         <div className="title">{props.name}</div>
         <div className="addStudy tooltip">
           <span className="tooltiptext">add study</span>
-          <MdAddCircle onClick={addStudy}></MdAddCircle>
+          <MdAddCircle onClick={() => addStudy(genRanHex(24))}></MdAddCircle>
         </div>
         <DesignStudy
           state={studyState}

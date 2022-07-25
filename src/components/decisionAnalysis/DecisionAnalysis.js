@@ -3,6 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import "./decisionAnalysis.css";
 import Option from "./Option";
+import {
+  createDecisionAnalysis,
+  updateDecisionAnalysis,
+} from "./decisionAnalysisSlice";
 
 export default function DecisionAnalysis(props) {
   let [optionsselected, setOptionsSelected] = useState([]);

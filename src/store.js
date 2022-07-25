@@ -1,12 +1,14 @@
 import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
 import designStudyReducer from "./components/designStudy/designStudySlice";
-import { apiSlice } from "./components/api/apiSlice";
+import decisionAnalysisReducer from "./components/decisionAnalysis/decisionAnalysisSlice";
+import { designStudyApiSlice } from "./components/api/designStudyApiSlice";
 
 export default configureStore({
   reducer: {
     designStudy: designStudyReducer,
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    decisionAnalysis: decisionAnalysisReducer,
+    [designStudyApiSlice.reducerPath]: designStudyApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    getDefaultMiddleware().concat(designStudyApiSlice.middleware),
 });

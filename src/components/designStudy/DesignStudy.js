@@ -1,40 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
-import { addDesignStudy, updateDesignStudy } from "./designStudySlice";
+import {
+  createDesignStudy,
+  readDesignStudy,
+  updateDesignStudy,
+} from "./designStudySlice";
 import { MdAddCircleOutline } from "react-icons/md";
 import {
   useGetOptionsQuery,
   useCreateProjectMutation,
   useCreateDesignStudyMutation,
-} from "../api/apiSlice";
-import { v4 as uuidv4 } from "uuid";
+} from "../api/designStudyApiSlice";
 
 import "./designStudy.css";
 import SummaryBar from "./SummaryBar";
 import DecisionAnalysis from "../decisionAnalysis/DecisionAnalysis";
+///////////////////////
 
 export default function DesignStudy(props) {
-  const [decisionAnalyses, setDecisisonAnalyses] = useState([
-    <DecisionAnalysis />,
-  ]);
+  const [decisionAnalyses, setDecisisonAnalyses] = useState([]);
 
-  let studyObject = {};
+  const [studyObject, setStudyObject] = useState({
+    name: "new study",
+    id: props.state.id,
+    phase_id: props.phase_id,
+  });
+
   const dispatch = useDispatch();
   const [modalIsOpen, setIsOpen] = useState(props.state.open);
   Modal.setAppElement("#root");
 
   function afterOpenModal() {
-    //add to store
     if (props.state.edit) {
-      //look up by id
+      setStudyObject(props.state.study);
     } else {
-      studyObject = {
-        name: "new design study",
+      setStudyObject({
+        name: "new study",
         id: props.state.id,
         phase_id: props.phase_id,
-      };
-      dispatch(addDesignStudy(studyObject));
+      });
     }
   }
   function closeModal() {
@@ -44,6 +49,13 @@ export default function DesignStudy(props) {
   useEffect(() => {
     setIsOpen(props.state.open);
   }, [props.state.open]);
+
+  //update or create the study object in redux store
+  useEffect(() => {
+    if (studyObject.id !== undefined) {
+      dispatch(updateDesignStudy(studyObject));
+    }
+  });
 
   const {
     data: options,
@@ -63,36 +75,17 @@ export default function DesignStudy(props) {
     content = <div>{error.toString()}</div>;
   }
 
-  const [createProject, response] = useCreateProjectMutation();
-  const [createDesignStudy, response1] = useCreateDesignStudyMutation();
-  const testpost = () => {
-    createProject({ name: "testProject" })
-      .unwrap()
-      .then(() => {})
-      .then((error) => {});
-  };
+  const [createDesignStudyApi, response1] = useCreateDesignStudyMutation();
 
   const saveStudy = () => {
-    createDesignStudy(
-      (studyObject = {
-        name: "test study 1",
-        id: props.state.id,
-        phase_id: props.phase_id,
-      })
-    )
+    createDesignStudyApi(studyObject)
       .unwrap()
       .then(() => {})
       .then((error) => {});
   };
 
   const handleNameChange = (event) => {
-    studyObject = {
-      name: event.target.value,
-      id: props.state.id,
-      phase_id: props.phase_id,
-    };
-
-    dispatch(updateDesignStudy(studyObject));
+    setStudyObject({ ...studyObject, name: event.target.value });
   };
 
   return (
@@ -126,7 +119,13 @@ export default function DesignStudy(props) {
           </div>
           <div className="analysisPanel">
             {decisionAnalyses.map((decisionAnalysis, i) => {
-              return <DecisionAnalysis key={i} options={content} />;
+              return (
+                <DecisionAnalysis
+                  key={i}
+                  options={content}
+                  study_id={props.id}
+                />
+              );
             })}
             <span className="tooltip">
               <MdAddCircleOutline
