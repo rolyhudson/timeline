@@ -17,34 +17,18 @@ import { genRanHex } from "../GenRanHex";
 
 export default function DesignStudy(props) {
   let analyses = useSelector((state) => state.decisionAnalysis.value);
-
+  let [copy, setCopy] = useState({ ...props.state.studyObject });
   const [decisionAnalyses, setDecisisonAnalyses] = useState([]);
 
-  const [studyObject, setStudyObject] = useState({
-    name: "new study",
-    id: props.state.id,
-    phase_id: props.phase_id,
-  });
-
   const dispatch = useDispatch();
-  const [modalIsOpen, setIsOpen] = useState(props.state.open);
+  const [modalIsOpen, setIsOpen] = useState(false);
   Modal.setAppElement("#root");
 
   function afterOpenModal() {
-    if (props.state.edit) {
-      //fetch decision analyses if in edit mode
-
-      setDecisisonAnalyses(
-        analyses.filter((s) => s.designstudy_id === props.state.study.id)
-      );
-      console.log(decisionAnalyses);
-      setStudyObject(props.state.study);
-    } else {
-      setStudyObject({
-        name: "new study",
-        id: props.state.id,
-        phase_id: props.phase_id,
-      });
+    if (props.state.studyObject.id !== undefined) {
+      //clone only once the id is set
+      console.log("cloning", props.state.studyObject.id);
+      setCopy({ ...props.state.studyObject });
     }
   }
   function closeModal() {
@@ -55,12 +39,17 @@ export default function DesignStudy(props) {
     setIsOpen(props.state.open);
   }, [props.state.open]);
 
-  //update or create the study object in redux store
+  const nameChanged = (event) => {
+    console.log("name change");
+    setCopy({ ...copy, name: event.target.value });
+  };
+
   useEffect(() => {
-    if (studyObject.id !== undefined) {
-      dispatch(updateDesignStudy(studyObject));
+    if (copy.id !== undefined) {
+      console.log("updating study", copy);
+      dispatch(updateDesignStudy(copy));
     }
-  });
+  }, [copy]);
 
   const {
     data: options,
@@ -83,14 +72,10 @@ export default function DesignStudy(props) {
   const [createDesignStudyApi, response1] = useCreateDesignStudyMutation();
 
   const saveStudy = () => {
-    createDesignStudyApi(studyObject)
-      .unwrap()
-      .then(() => {})
-      .then((error) => {});
-  };
-
-  const handleNameChange = (event) => {
-    setStudyObject({ ...studyObject, name: event.target.value });
+    // createDesignStudyApi(studyObject)
+    //   .unwrap()
+    //   .then(() => {})
+    //   .then((error) => {});
   };
 
   return (
@@ -102,18 +87,9 @@ export default function DesignStudy(props) {
         contentLabel="Example Modal"
       >
         <div className="header">
-          {props.state.edit ? (
-            <span>Edit Design study:</span>
-          ) : (
-            <span>New Design study:</span>
-          )}
+          <span>Design study:</span>
 
-          <input
-            type="text"
-            value={studyObject.name}
-            onChange={handleNameChange}
-          />
-
+          <input type="text" value={copy.name} onChange={nameChanged} />
           <button onClick={props.close}>close</button>
           <button onClick={saveStudy}>save</button>
         </div>
@@ -128,7 +104,7 @@ export default function DesignStudy(props) {
                 <DecisionAnalysis
                   key={i}
                   options={content}
-                  parent_id={studyObject.id}
+                  parent_id={copy.id}
                   id={decisionAnalysis}
                 />
               );
