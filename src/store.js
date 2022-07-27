@@ -1,7 +1,7 @@
 import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
 import designStudyReducer from "./components/designStudy/designStudySlice";
 import decisionAnalysisReducer from "./components/decisionAnalysis/decisionAnalysisSlice";
-import { designStudyApiSlice } from "./components/api/designStudyApiSlice";
+import { designStudyApiSlice } from "./components/designStudy/designStudyApiSlice";
 
 export default configureStore({
   reducer: {

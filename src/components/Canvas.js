@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Timeline from "./Timeline";
+import OptionsPreloader from "./OptionsPreloader";
 import { MdZoomIn, MdZoomOut, MdZoomOutMap } from "react-icons/md";
+import StoreStatus from "./StoreStatus";
 export default function Canvas() {
   let [scale, setScale] = useState(1);
 
@@ -19,6 +21,8 @@ export default function Canvas() {
   return (
     <>
       <div className="control">
+        <OptionsPreloader />
+        <StoreStatus />
         <h1>
           <div className="tooltip">
             <span className="tooltiptext">zoom in</span>

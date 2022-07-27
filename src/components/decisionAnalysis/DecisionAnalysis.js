@@ -17,12 +17,15 @@ export default function DecisionAnalysis(props) {
   let [optionsToPick, setOptionsToPick] = useState([]);
   let [selectedElement, setSelectedElement] = useState(null);
 
-  let [analysisObject, setAnalysisObject] = useState();
+  //set inital copy
+  let [copy, setCopy] = useState({ ...props.datamodel });
 
+  //format element list for select drop down
   let elements = props.options.map((option) => ({
     name: option.parentElement,
     label: option.parentElement,
   }));
+
   //unique element list
   elements = [...new Map(elements.map((item) => [item.name, item])).values()];
 
@@ -36,13 +39,13 @@ export default function DecisionAnalysis(props) {
   };
 
   useEffect(() => {
-    if (props.parent_id !== undefined) {
+    if (props.datamodel.designstudy_id !== undefined) {
       //look up
     } else {
       //create
-      if (analysisObject.designstudy_id !== undefined) {
-        console.log("updating analysis", analysisObject);
-        dispatch(updateDecisionAnalysis(analysisObject));
+      if (copy.designstudy_id !== undefined) {
+        console.log("updating analysis", copy);
+        dispatch(updateDecisionAnalysis(copy));
       }
     }
   });
@@ -61,7 +64,10 @@ export default function DecisionAnalysis(props) {
     setOptionsSelected([...optionsselected, option]);
   };
 
-  const handleNameChange = () => {};
+  const nameChanged = (event) => {
+    console.log("name change");
+    setCopy({ ...copy, name: event.target.value });
+  };
 
   return (
     <div className="decisionAnalysis">
@@ -72,7 +78,7 @@ export default function DecisionAnalysis(props) {
         <input
           type="text"
           value={"analysisObject.name"}
-          onChange={handleNameChange}
+          onChange={nameChanged}
         />
       </div>
 

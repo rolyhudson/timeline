@@ -5,22 +5,33 @@ import { useSelector, useDispatch } from "react-redux";
 import { genRanHex } from "./GenRanHex";
 import { updateDesignStudy } from "./designStudy/designStudySlice";
 
+import { useUpdateDesignStudyMutation } from "./designStudy/designStudyApiSlice";
+///////////////////////
+//Component
 export default function Phase(props) {
+  const [updateDesignStudyApi, response1] = useUpdateDesignStudyMutation();
+
+  //get all children (studies) could also come via rtk query
   let studies = useSelector((state) => state.designStudy.value);
+
+  //filter for those related to this parent (phase)
   let [childStudies, setChildStudies] = useState(
     studies.filter((s) => s.phase_id === props.id)
   );
 
+  //init study state and study object
   let [studyState, setStudyState] = useState({
     open: false,
     studyObject: { name: "new study" },
   });
 
+  //new study open modal triggered
   const addStudy = () => {
     let study = { id: genRanHex(24), phase_id: props.id, name: "new study" };
     setStudyState({ open: true, studyObject: study });
   };
 
+  //edit study open modal triggered with study object from child studies
   const editStudy = (study_id) => {
     let study = childStudies.find((obj) => obj.id === study_id);
     setStudyState({ open: true, studyObject: study });
@@ -32,6 +43,16 @@ export default function Phase(props) {
     setChildStudies(studies.filter((s) => s.phase_id === props.id));
     console.log("studies created:", studies);
   };
+
+  //update in redux store when childStudies updates
+  useEffect(() => {
+    //update in db the child studies for this phase
+    childStudies.forEach((element) => {
+      console.log("updating", element.name);
+      updateDesignStudyApi(element);
+      console.log(response1);
+    });
+  }, [childStudies]);
 
   return (
     <div>

@@ -68,6 +68,9 @@ code {
   margin: 0px;
   display: flex;
 }
+.datastatus {
+  font-size: 10px;
+}
 .tooltip {
   position: relative;
   display: inline-block;

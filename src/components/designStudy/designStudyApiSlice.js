@@ -43,13 +43,13 @@ export const designStudyApiSlice = createApi({
     updateDesignStudy: builder.mutation({
       query: (payload) => ({
         url: `/DesignStudies/${payload.id}`,
-        method: "POST",
+        method: "PUT",
         body: payload,
         headers: {
           "content-type": "application/json; charset=UTF-8",
         },
       }),
-      invalidatesTags: ["Post"],
+      invalidatesTags: ["Put"],
     }),
   }),
 });
