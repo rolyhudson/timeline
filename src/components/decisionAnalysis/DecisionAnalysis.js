@@ -41,6 +41,7 @@ export default function DecisionAnalysis(props) {
     } else {
       //create
       if (analysisObject.designstudy_id !== undefined) {
+        console.log("updating analysis", analysisObject);
         dispatch(updateDecisionAnalysis(analysisObject));
       }
     }

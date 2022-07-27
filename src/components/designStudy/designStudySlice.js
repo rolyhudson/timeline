@@ -14,8 +14,14 @@ export const designStudySlice = createSlice({
       let objIndex = state.value.findIndex(
         (obj) => obj.id === action.payload.id
       );
-      if (objIndex === -1) state.value.push(action.payload);
-      else state.value[objIndex] = action.payload;
+      //create if not found
+      if (objIndex === -1) {
+        state.value.push(action.payload);
+      }
+      //update if found
+      else {
+        state.value[objIndex] = action.payload;
+      }
     },
   },
 });
