@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
-import { updateDesignStudy } from "./designStudySlice";
-import { useUpdateDecisionsAnalyisMutation } from "../decisionAnalysis/decisionAnalysisApiSlice";
+
 import { MdAddCircleOutline } from "react-icons/md";
 
-import "./designStudy.css";
 import SummaryBar from "./SummaryBar";
 import DecisionAnalysis from "../decisionAnalysis/DecisionAnalysis";
-import {
-  useGetOptionsQuery,
-  useUpdateDesignStudyMutation,
-  useCreateDesignStudyMutation,
-} from "./designStudyApiSlice";
+import { updateDesignStudy } from "./designStudySlice";
+
+import { useUpdateDesignStudyMutation } from "./designStudyApiSlice";
+import { useGetOptionsQuery } from "../option/optionApiSlice";
+import { useUpdateDecisionAnalysisMutation } from "../decisionAnalysis/decisionAnalysisApiSlice";
 
 import { genRanHex } from "../GenRanHex";
-import { useUpdateDecisionAnalysisMutation } from "../decisionAnalysis/decisionAnalysisApiSlice";
+
+import "./designStudy.css";
+
 ///////////////////////
 //Component
 export default function DesignStudy(props) {
@@ -41,10 +41,10 @@ export default function DesignStudy(props) {
 
   //on open the model clone the data model that the component represents if valid
   function afterOpenModal() {
-    console.log("opening modal");
+    console.log("opening modal", props);
     if (props.state.studyObject.id !== undefined) {
       //clone only once the id is set
-      console.log("cloning", props.state.studyObject.id);
+      console.log("cloning", props.state.studyObject);
       setCopy({ ...props.state.studyObject });
       //filter the child analyses
       setChildAnalyses(
@@ -63,7 +63,7 @@ export default function DesignStudy(props) {
   //modal close
   function closeModal() {
     //re filter for changed analyses
-    console.log("closing modal");
+    console.log("closing modal", childAnalyses);
     //update in db
     updateChildrenInDB();
     //reset children
@@ -96,7 +96,7 @@ export default function DesignStudy(props) {
   //output child analyses
   useEffect(() => {
     console.log("child analyses", childAnalyses);
-  }, [setChildAnalyses]);
+  }, [childAnalyses]);
 
   //update to database on save click
   const [updateDesignStudyApi, response1] = useUpdateDesignStudyMutation();
@@ -157,6 +157,7 @@ export default function DesignStudy(props) {
                       name: "new analysis",
                       id: genRanHex(24),
                       designstudy_id: copy.id,
+                      element: null,
                     },
                   ])
                 }

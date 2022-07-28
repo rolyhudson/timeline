@@ -2,35 +2,34 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Define our single API slice object
-export const decisionAnalysisApiSlice = createApi({
+export const optionApiSlice = createApi({
   // The cache reducer expects to be added at `state.api` (already default - this is optional)
-  reducerPath: "decisionanalysisapi",
+  reducerPath: "optionapi",
   // All of our requests will have URLs starting with "https://rat-prototype-api.azurewebsites.net/api"
   baseQuery: fetchBaseQuery({
     baseUrl: "https://rat-prototype-api.azurewebsites.net/api",
   }),
   // The "endpoints" represent operations and requests for this server
   endpoints: (builder) => ({
-    // The `getPosts` endpoint is a "query" operation that returns data
-    getDecisionAnalyses: builder.query({
-      query: () => "/DecisionAnalyses",
+    getOptions: builder.query({
+      query: () => "/Options",
     }),
 
-    updateDecisionAnalysis: builder.mutation({
+    createOption: builder.mutation({
       query: (payload) => ({
-        url: `/DecisionAnalyses/${payload.id}`,
-        method: "PUT",
+        url: "/Options",
+        method: "POST",
         body: payload,
         headers: {
           "content-type": "application/json; charset=UTF-8",
         },
       }),
-      invalidatesTags: ["Put"],
+      invalidatesTags: ["Post"],
     }),
 
-    deleteDecisionAnalysis: builder.mutation({
+    deleteOption: builder.mutation({
       query: (payload) => ({
-        url: `/DecisionAnalyses/${payload.id}`,
+        url: `/Options/${payload.id}`,
         method: "DELETE",
         body: payload,
         headers: {
@@ -42,9 +41,9 @@ export const decisionAnalysisApiSlice = createApi({
   }),
 });
 
-// Export the auto-generated hook for the `getPosts` query endpoint
+// Export the auto-generated hooks
 export const {
-  useGetDecisionAnalysesQuery,
-  useUpdateDecisionAnalysisMutation,
-  useDeleteDecisionAnalysisMutation,
-} = decisionAnalysisApiSlice;
+  useGetOptionsQuery,
+  useCreateOptionMutation,
+  useDeleteOptionMutation,
+} = optionApiSlice;

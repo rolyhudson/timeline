@@ -18,12 +18,15 @@ export const decisionAnalysisSlice = createSlice({
       else state.value[objIndex] = action.payload;
     },
 
-    queryDecisionAnalysisExists: (state, action) => {
+    removeDecisionAnalysis: (state, action) => {
       let objIndex = state.value.findIndex(
         (obj) => obj.id === action.payload.id
       );
-      if (objIndex === -1) return action.payload;
-      else return state.value[objIndex];
+      if (objIndex === -1) {
+        return;
+      } else {
+        state.value.splice(objIndex, 1);
+      }
     },
   },
 });
@@ -32,7 +35,7 @@ export const decisionAnalysisSlice = createSlice({
 export const {
   createDecisionAnalysis,
   updateDecisionAnalysis,
-  queryDecisionAnalysisExists,
+  removeDecisionAnalysis,
 } = decisionAnalysisSlice.actions;
 
 export default decisionAnalysisSlice.reducer;

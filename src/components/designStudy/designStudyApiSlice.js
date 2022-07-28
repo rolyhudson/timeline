@@ -4,38 +4,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // Define our single API slice object
 export const designStudyApiSlice = createApi({
   // The cache reducer expects to be added at `state.api` (already default - this is optional)
-  reducerPath: "api",
+  reducerPath: "designstudyapi",
   // All of our requests will have URLs starting with "https://rat-prototype-api.azurewebsites.net/api"
   baseQuery: fetchBaseQuery({
     baseUrl: "https://rat-prototype-api.azurewebsites.net/api",
   }),
   // The "endpoints" represent operations and requests for this server
   endpoints: (builder) => ({
-    // TODO separate files for different end points
-    getOptions: builder.query({
-      query: () => "/Options",
-    }),
-
-    getProjects: builder.query({
-      query: () => "/Projects",
-    }),
-
-    getPhases: builder.query({
-      query: () => "/Phases",
-    }),
-
-    createProject: builder.mutation({
-      query: (payload) => ({
-        url: "/Projects",
-        method: "POST",
-        body: payload,
-        headers: {
-          "content-type": "application/json; charset=UTF-8",
-        },
-      }),
-      invalidatesTags: ["Post"],
-    }),
-
     getStudies: builder.query({
       query: () => "/DesignStudies",
     }),
@@ -63,16 +38,25 @@ export const designStudyApiSlice = createApi({
       }),
       invalidatesTags: ["Put"],
     }),
+
+    deleteDesignStudy: builder.mutation({
+      query: (payload) => ({
+        url: `/DesignStudies/${payload.id}`,
+        method: "DELETE",
+        body: payload,
+        headers: {
+          "content-type": "application/json; charset=UTF-8",
+        },
+      }),
+      invalidatesTags: ["Post"],
+    }),
   }),
 });
 
-// Export the auto-generated hook for the `getPosts` query endpoint
+// Export the auto-generated hooks
 export const {
-  useGetOptionsQuery,
-  useGetProjectsQuery,
-  useGetPhasesQuery,
-  useCreateProjectMutation,
   useCreateDesignStudyMutation,
   useGetStudiesQuery,
   useUpdateDesignStudyMutation,
+  useDeleteDesignStudyMutation,
 } = designStudyApiSlice;

@@ -50,7 +50,12 @@ export default function Phase(props) {
       updateDesignStudyApi(element);
       //console.log(response1);
     });
-  }, [childStudies, updateDesignStudyApi]);
+  }, [childStudies]);
+
+  //update when studies in store has changed
+  useEffect(() => {
+    setChildStudies(studies.filter((s) => s.phase_id === props.id));
+  }, [studies]);
 
   return (
     <div>

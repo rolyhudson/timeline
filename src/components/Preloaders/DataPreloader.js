@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useGetOptionsQuery } from "../designStudy/designStudyApiSlice";
 
 export default function DataPreloader(props) {
-  const { data, isLoading, isSuccess, isError, error } = props.apiCall();
+  const { data, isLoading, isSuccess, isError, error } = props.apiGet();
+  const [deleteApi, response1] = props.apiDelete();
 
+  const clearDataBase = () => {
+    data.map((d) => {
+      deleteApi(d);
+    });
+  };
   let content;
 
   if (isLoading) {
@@ -15,15 +20,22 @@ export default function DataPreloader(props) {
   }
 
   return (
-    <div className="datastatus">
-      {props.name}
-      {error ? (
-        <div>Database error</div>
-      ) : isLoading ? (
-        <>Loading...</>
-      ) : data ? (
-        <div>loaded: {data.length}</div>
-      ) : null}
-    </div>
+    <>
+      <div className="datastatus">
+        {props.name}
+        {error ? (
+          <div>Database error</div>
+        ) : isLoading ? (
+          <>Loading...</>
+        ) : data ? (
+          <div>loaded: {data.length}</div>
+        ) : null}
+        {props.allowClear ? (
+          <button onClick={clearDataBase}>clear db</button>
+        ) : (
+          <button disabled>clear db</button>
+        )}
+      </div>
+    </>
   );
 }

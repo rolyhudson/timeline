@@ -15,7 +15,6 @@ export default function DecisionAnalysis(props) {
   const dispatch = useDispatch();
   let [optionsselected, setOptionsSelected] = useState([]);
   let [optionsToPick, setOptionsToPick] = useState([]);
-  let [selectedElement, setSelectedElement] = useState(null);
 
   //set inital copy
   let [copy, setCopy] = useState({ ...props.datamodel });
@@ -24,14 +23,44 @@ export default function DecisionAnalysis(props) {
   let elements = props.options.map((option) => ({
     name: option.parentElement,
     label: option.parentElement,
+    id: option.id,
   }));
 
   //unique element list
   elements = [...new Map(elements.map((item) => [item.name, item])).values()];
 
+  //check datamodel
+  const isValid = (datamodel) => {
+    //TODO validate all properties
+    if (datamodel.element) return true;
+    else return false;
+  };
+
+  //on mount
+  useEffect(() => {
+    console.log("mounting", props.datamodel);
+    if (isValid(props.datamodel)) {
+      setCopy(props.datamodel);
+      let selected = null;
+      handleElementChange(props.datamodel.element);
+      setOptionsToPick(
+        props.options.filter(
+          (option) =>
+            option.name.includes(props.datamodel.element.name) &&
+            !props.datamodel.designoptions_ids.includes(option.id)
+        )
+      );
+      setOptionsSelected(
+        props.options.filter((option) =>
+          copy.designoptions_ids.includes(option.id)
+        )
+      );
+    }
+  }, []);
+
   //select element change
   const handleElementChange = (selectedElement) => {
-    setSelectedElement(selectedElement);
+    setCopy({ ...copy, element: selectedElement });
     setOptionsToPick(
       props.options.filter((option) =>
         option.name.includes(selectedElement.name)
@@ -47,6 +76,7 @@ export default function DecisionAnalysis(props) {
     }
   }, [copy]);
 
+  //remove from selected list
   const removeOptionById = (option) => {
     //remove from selected
     setOptionsSelected(
@@ -55,6 +85,10 @@ export default function DecisionAnalysis(props) {
     //add to pick list
     setOptionsToPick([...optionsToPick, option]);
   };
+
+  useEffect(() => {
+    setCopy({ ...copy, designoptions_ids: optionsselected.map((op) => op.id) });
+  }, [optionsselected]);
 
   const addOptionById = (option) => {
     setOptionsToPick(optionsToPick.filter((item) => item.name !== option.name));
@@ -79,10 +113,10 @@ export default function DecisionAnalysis(props) {
         <div className="flex-child">
           Element:
           <Select
-            selectedOption={selectedElement}
             onChange={handleElementChange}
             options={elements}
             getOptionValue={(option) => option.label}
+            defaultValue={undefined}
           />
           Options to compare:
           {optionsselected.map((option, index) => {
