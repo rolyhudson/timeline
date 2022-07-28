@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Timeline from "./Timeline";
-import Preloader from "./Preloaders/Preloader";
+import Preloader from "./preloaders/Preloader";
 import { MdZoomIn, MdZoomOut, MdZoomOutMap } from "react-icons/md";
 import StoreStatus from "./StoreStatus";
 export default function Canvas() {

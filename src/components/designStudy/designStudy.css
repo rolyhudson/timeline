@@ -1,6 +1,6 @@
 .header {
   display: flex;
-  background-color: palegreen;
+  background-color: #e0e0e0;
 
   padding: 20px;
 }
@@ -16,11 +16,11 @@
 }
 .flex-container {
   display: flex;
-  background-color: paleturquoise;
+  background-color: #f0f0f0;
 }
 
 .flex-container > div {
-  background-color: #f1f1f1;
+  background-color: #ffffff;
   margin: 10px;
   padding: 20px;
 }

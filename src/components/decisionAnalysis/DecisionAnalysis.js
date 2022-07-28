@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import "./decisionAnalysis.css";
-import Option from "./Option";
+import Option from "../option/Option";
 import {
   createDecisionAnalysis,
   updateDecisionAnalysis,
@@ -38,7 +38,7 @@ export default function DecisionAnalysis(props) {
 
   //on mount
   useEffect(() => {
-    console.log("mounting", props.datamodel);
+    console.log("mounting");
     if (isValid(props.datamodel)) {
       setCopy(props.datamodel);
       let selected = null;
@@ -66,6 +66,7 @@ export default function DecisionAnalysis(props) {
         option.name.includes(selectedElement.name)
       )
     );
+    setOptionsSelected([]);
   };
 
   //copy changed update in store
@@ -100,6 +101,11 @@ export default function DecisionAnalysis(props) {
     setCopy({ ...copy, name: event.target.value });
   };
 
+  const checkChanged = (event) => {
+    console.log("check change", event);
+    setCopy({ ...copy, selectedoption_id: event.target.id });
+  };
+
   return (
     <div className="decisionAnalysis">
       <div className="decisionAnalysisHeader">
@@ -121,11 +127,21 @@ export default function DecisionAnalysis(props) {
           Options to compare:
           {optionsselected.map((option, index) => {
             return (
-              <Option
-                key={index}
-                option={option}
-                removeOption={removeOptionById}
-              />
+              <div className="optionBox">
+                <input
+                  type="checkbox"
+                  id={option.id}
+                  key={option.id}
+                  onClick={checkChanged}
+                  checked={option.id === copy.selectedoption_id}
+                ></input>
+
+                <Option
+                  key={index}
+                  option={option}
+                  removeOption={removeOptionById}
+                />
+              </div>
             );
           })}
         </div>
