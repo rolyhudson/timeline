@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
 import { updateDesignStudy } from "./designStudySlice";
+import { useUpdateDecisionsAnalyisMutation } from "../decisionAnalysis/decisionAnalysisApiSlice";
 import { MdAddCircleOutline } from "react-icons/md";
 
 import "./designStudy.css";
@@ -14,6 +15,7 @@ import {
 } from "./designStudyApiSlice";
 
 import { genRanHex } from "../GenRanHex";
+import { useUpdateDecisionAnalysisMutation } from "../decisionAnalysis/decisionAnalysisApiSlice";
 ///////////////////////
 //Component
 export default function DesignStudy(props) {
@@ -28,25 +30,48 @@ export default function DesignStudy(props) {
   let analyses = useSelector((state) => state.decisionAnalysis.value);
 
   //filter for those related to this parent (study)
-  let [childAnalyses, setChildAnalyses] = useState(
-    analyses.filter((s) => s.designstudy_id === props.datamodel.designstudy_id)
-  );
+  let [childAnalyses, setChildAnalyses] = useState([]); //analyses.filter((s) => s.designstudy_id === props.datamodel.designstudy_id)
 
   //get options from rtk query
   const { data, isLoading, isSuccess, isError, error } = useGetOptionsQuery();
 
+  //api for analysis
+  const [updateDecisionAnalysisApi, response2] =
+    useUpdateDecisionAnalysisMutation();
+
   //on open the model clone the data model that the component represents if valid
   function afterOpenModal() {
+    console.log("opening modal");
     if (props.state.studyObject.id !== undefined) {
       //clone only once the id is set
       console.log("cloning", props.state.studyObject.id);
       setCopy({ ...props.state.studyObject });
+      //filter the child analyses
+      setChildAnalyses(
+        analyses.filter((s) => s.designstudy_id === props.state.studyObject.id)
+      );
     }
   }
 
+  //change to redux store analyses triggers update to child analyses
+  useEffect(() => {
+    setChildAnalyses(
+      analyses.filter((s) => s.designstudy_id === props.state.studyObject.id)
+    );
+  }, [analyses]);
+
   //modal close
   function closeModal() {
+    //re filter for changed analyses
+    console.log("closing modal");
+    //update in db
+    updateChildrenInDB();
+    //reset children
+    setChildAnalyses([]);
+    //change open property
     setIsOpen(false);
+    //call close on parent
+    props.close();
   }
 
   //toggle modal open
@@ -56,17 +81,22 @@ export default function DesignStudy(props) {
 
   //handle name change on study
   const nameChanged = (event) => {
-    console.log("name change");
+    //console.log("name change");
     setCopy({ ...copy, name: event.target.value });
   };
 
   //update to copy triggers update in redux store
   useEffect(() => {
     if (copy.id !== undefined) {
-      console.log("updating study", copy);
+      console.log("updating study");
       dispatch(updateDesignStudy(copy));
     }
   }, [copy]);
+
+  //output child analyses
+  useEffect(() => {
+    console.log("child analyses", childAnalyses);
+  }, [setChildAnalyses]);
 
   //update to database on save click
   const [updateDesignStudyApi, response1] = useUpdateDesignStudyMutation();
@@ -74,6 +104,15 @@ export default function DesignStudy(props) {
     console.log("updating on db");
     updateDesignStudyApi(copy);
     console.log(response1);
+    updateChildrenInDB();
+  };
+
+  const updateChildrenInDB = () => {
+    childAnalyses.forEach((element) => {
+      console.log("updating", element.name);
+      updateDecisionAnalysisApi(element);
+      //console.log(response2);
+    });
   };
 
   return (
@@ -87,7 +126,7 @@ export default function DesignStudy(props) {
         <div className="header">
           <span>Design study:</span>
           <input type="text" value={copy.name} onChange={nameChanged} />
-          <button onClick={props.close}>close</button>
+          <button onClick={closeModal}>close</button>
           <button onClick={saveStudy}>save</button>
         </div>
 

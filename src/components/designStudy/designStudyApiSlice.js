@@ -11,9 +11,17 @@ export const designStudyApiSlice = createApi({
   }),
   // The "endpoints" represent operations and requests for this server
   endpoints: (builder) => ({
-    // The `getPosts` endpoint is a "query" operation that returns data
+    // TODO separate files for different end points
     getOptions: builder.query({
       query: () => "/Options",
+    }),
+
+    getProjects: builder.query({
+      query: () => "/Projects",
+    }),
+
+    getPhases: builder.query({
+      query: () => "/Phases",
     }),
 
     createProject: builder.mutation({
@@ -26,6 +34,10 @@ export const designStudyApiSlice = createApi({
         },
       }),
       invalidatesTags: ["Post"],
+    }),
+
+    getStudies: builder.query({
+      query: () => "/DesignStudies",
     }),
 
     createDesignStudy: builder.mutation({
@@ -57,7 +69,10 @@ export const designStudyApiSlice = createApi({
 // Export the auto-generated hook for the `getPosts` query endpoint
 export const {
   useGetOptionsQuery,
+  useGetProjectsQuery,
+  useGetPhasesQuery,
   useCreateProjectMutation,
   useCreateDesignStudyMutation,
+  useGetStudiesQuery,
   useUpdateDesignStudyMutation,
 } = designStudyApiSlice;

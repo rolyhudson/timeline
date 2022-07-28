@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useGetOptionsQuery } from "./designStudy/designStudyApiSlice";
+import { useGetOptionsQuery } from "../designStudy/designStudyApiSlice";
 
-export default function OptionsPreloader(props) {
-  const { data, isLoading, isSuccess, isError, error } = useGetOptionsQuery();
+export default function DataPreloader(props) {
+  const { data, isLoading, isSuccess, isError, error } = props.apiCall();
 
   let content;
 
@@ -16,13 +16,13 @@ export default function OptionsPreloader(props) {
 
   return (
     <div className="datastatus">
-      Database status:
+      {props.name}
       {error ? (
-        <>Database error</>
+        <div>Database error</div>
       ) : isLoading ? (
         <>Loading...</>
       ) : data ? (
-        <div> options loaded: {data.length}</div>
+        <div>loaded: {data.length}</div>
       ) : null}
     </div>
   );

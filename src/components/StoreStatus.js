@@ -6,8 +6,8 @@ export default function StoreStatus(props) {
   return (
     <div className="datastatus">
       Store status:
-      <div>Studies: {studies.length}</div>
-      <div>Analyses: {analyses.length}</div>
+      <div className="datastatus">Studies: {studies.length}</div>
+      <div className="datastatus">Analyses: {analyses.length}</div>
     </div>
   );
 }

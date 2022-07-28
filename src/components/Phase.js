@@ -9,8 +9,6 @@ import { useUpdateDesignStudyMutation } from "./designStudy/designStudyApiSlice"
 ///////////////////////
 //Component
 export default function Phase(props) {
-  const [updateDesignStudyApi, response1] = useUpdateDesignStudyMutation();
-
   //get all children (studies) could also come via rtk query
   let studies = useSelector((state) => state.designStudy.value);
 
@@ -41,18 +39,18 @@ export default function Phase(props) {
     //update the state.open property
     setStudyState({ ...studyState, open: false, id: undefined });
     setChildStudies(studies.filter((s) => s.phase_id === props.id));
-    console.log("studies created:", studies);
+    console.log("studies created: ", studies);
   };
 
-  //update in redux store when childStudies updates
+  //update in db the child studies for this phase
+  const [updateDesignStudyApi, response1] = useUpdateDesignStudyMutation();
   useEffect(() => {
-    //update in db the child studies for this phase
     childStudies.forEach((element) => {
       console.log("updating", element.name);
       updateDesignStudyApi(element);
-      console.log(response1);
+      //console.log(response1);
     });
-  }, [childStudies]);
+  }, [childStudies, updateDesignStudyApi]);
 
   return (
     <div>

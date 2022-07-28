@@ -29,6 +29,7 @@ export default function DecisionAnalysis(props) {
   //unique element list
   elements = [...new Map(elements.map((item) => [item.name, item])).values()];
 
+  //select element change
   const handleElementChange = (selectedElement) => {
     setSelectedElement(selectedElement);
     setOptionsToPick(
@@ -38,17 +39,13 @@ export default function DecisionAnalysis(props) {
     );
   };
 
+  //copy changed update in store
   useEffect(() => {
-    if (props.datamodel.designstudy_id !== undefined) {
-      //look up
-    } else {
-      //create
-      if (copy.designstudy_id !== undefined) {
-        console.log("updating analysis", copy);
-        dispatch(updateDecisionAnalysis(copy));
-      }
+    if (copy.designstudy_id !== undefined) {
+      console.log("updating analysis", copy);
+      dispatch(updateDecisionAnalysis(copy));
     }
-  });
+  }, [copy]);
 
   const removeOptionById = (option) => {
     //remove from selected
@@ -75,11 +72,7 @@ export default function DecisionAnalysis(props) {
         <span>
           <b>Decision analysis:</b>
         </span>
-        <input
-          type="text"
-          value={"analysisObject.name"}
-          onChange={nameChanged}
-        />
+        <input type="text" value={copy.name} onChange={nameChanged} />
       </div>
 
       <div className="flex-parent">
