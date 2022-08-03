@@ -4,7 +4,7 @@ import Modal from "react-modal";
 
 import { MdAddCircleOutline } from "react-icons/md";
 
-import SummaryBar from "./SummaryBar";
+import SummaryBar from "../summaryBar/SummaryBar";
 import DecisionAnalysis from "../decisionAnalysis/DecisionAnalysis";
 import { updateDesignStudy } from "./designStudySlice";
 
@@ -132,7 +132,7 @@ export default function DesignStudy(props) {
 
         <div className="flex-container">
           <div className="leftBar">
-            <SummaryBar />
+            <SummaryBar childAnalyses={childAnalyses} />
           </div>
           <div className="analysisPanel">
             {data ? (

@@ -57,6 +57,7 @@ export const designStudyApiSlice = createApi({
 export const {
   useCreateDesignStudyMutation,
   useGetStudiesQuery,
+  useLazyGetStudiesQuery,
   useUpdateDesignStudyMutation,
   useDeleteDesignStudyMutation,
 } = designStudyApiSlice;

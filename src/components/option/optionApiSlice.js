@@ -46,4 +46,5 @@ export const {
   useGetOptionsQuery,
   useCreateOptionMutation,
   useDeleteOptionMutation,
+  useLazyGetOptionsQuery,
 } = optionApiSlice;

@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
 
 export default function DataPreloader(props) {
-  const { data, isLoading, isSuccess, isError, error } = props.apiGet();
+  //const { data, isLoading, isSuccess, isError, error } = props.apiGet();
   const [deleteApi, response1] = props.apiDelete();
+  const [
+    trigger,
+    { data, isLoading, isSuccess, isError, error },
+    lastPromiseInfo,
+  ] = props.apiLazyGet();
+
+  //useEffect(()=>{if(props.update)})
+
+  const reloadDataBase = () => {
+    trigger(false);
+  };
 
   const clearDataBase = () => {
     data.map((d) => {
@@ -35,6 +46,7 @@ export default function DataPreloader(props) {
         ) : (
           <button disabled>clear db</button>
         )}
+        <button onClick={reloadDataBase}>reload</button>
       </div>
     </>
   );
