@@ -8,8 +8,15 @@
 .flex-parent {
   display: flex;
 }
-.flex-child {
-  flex: 0.5;
+.comparelist {
+  flex: 0.7;
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.picklist {
+  flex: 0.3;
   margin: 5px;
   padding: 5px;
   border: 1px solid black;

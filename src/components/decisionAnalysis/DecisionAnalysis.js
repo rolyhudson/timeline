@@ -116,8 +116,8 @@ export default function DecisionAnalysis(props) {
       </div>
 
       <div className="flex-parent">
-        <div className="flex-child">
-          Element:
+        <div className="comparelist">
+          Filter:
           <Select
             onChange={handleElementChange}
             options={elements}
@@ -145,7 +145,7 @@ export default function DecisionAnalysis(props) {
             );
           })}
         </div>
-        <div className="flex-child">
+        <div className="picklist">
           Options:
           {optionsToPick.map((option, index) => {
             return (
